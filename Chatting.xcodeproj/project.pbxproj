@@ -10,11 +10,11 @@
 		2E7437821CC5EAFD0017D3FF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437811CC5EAFD0017D3FF /* main.m */; };
 		2E7437851CC5EAFD0017D3FF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437841CC5EAFD0017D3FF /* AppDelegate.m */; };
 		2E7437881CC5EAFD0017D3FF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437871CC5EAFD0017D3FF /* ViewController.m */; };
-		2E74378B1CC5EAFD0017D3FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E7437891CC5EAFD0017D3FF /* Main.storyboard */; };
 		2E74378D1CC5EAFD0017D3FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E74378C1CC5EAFD0017D3FF /* Assets.xcassets */; };
 		2E7437901CC5EAFD0017D3FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E74378E1CC5EAFD0017D3FF /* LaunchScreen.storyboard */; };
 		2E74379B1CC5EAFD0017D3FF /* ChattingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E74379A1CC5EAFD0017D3FF /* ChattingTests.m */; };
 		2E7437A61CC5EAFD0017D3FF /* ChattingUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437A51CC5EAFD0017D3FF /* ChattingUITests.m */; };
+		2EB2BE5E1CCA42F900FB1925 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2BE5D1CCA42F900FB1925 /* MessageCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +41,6 @@
 		2E7437841CC5EAFD0017D3FF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2E7437861CC5EAFD0017D3FF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		2E7437871CC5EAFD0017D3FF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		2E74378A1CC5EAFD0017D3FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2E74378C1CC5EAFD0017D3FF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E74378F1CC5EAFD0017D3FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7437911CC5EAFD0017D3FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +50,8 @@
 		2E7437A11CC5EAFD0017D3FF /* ChattingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChattingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7437A51CC5EAFD0017D3FF /* ChattingUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChattingUITests.m; sourceTree = "<group>"; };
 		2E7437A71CC5EAFD0017D3FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2EB2BE5C1CCA42F900FB1925 /* MessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageCell.h; path = Chatting/ChattingView/MessageCell.h; sourceTree = "<group>"; };
+		2EB2BE5D1CCA42F900FB1925 /* MessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCell.m; path = Chatting/ChattingView/MessageCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		2E7437741CC5EAFD0017D3FF = {
 			isa = PBXGroup;
 			children = (
+				2EB2BE391CC5EC9800FB1925 /* ChattingView */,
 				2E74377F1CC5EAFD0017D3FF /* Chatting */,
 				2E7437991CC5EAFD0017D3FF /* ChattingTests */,
 				2E7437A41CC5EAFD0017D3FF /* ChattingUITests */,
@@ -105,7 +107,6 @@
 				2E7437841CC5EAFD0017D3FF /* AppDelegate.m */,
 				2E7437861CC5EAFD0017D3FF /* ViewController.h */,
 				2E7437871CC5EAFD0017D3FF /* ViewController.m */,
-				2E7437891CC5EAFD0017D3FF /* Main.storyboard */,
 				2E74378C1CC5EAFD0017D3FF /* Assets.xcassets */,
 				2E74378E1CC5EAFD0017D3FF /* LaunchScreen.storyboard */,
 				2E7437911CC5EAFD0017D3FF /* Info.plist */,
@@ -138,6 +139,15 @@
 				2E7437A71CC5EAFD0017D3FF /* Info.plist */,
 			);
 			path = ChattingUITests;
+			sourceTree = "<group>";
+		};
+		2EB2BE391CC5EC9800FB1925 /* ChattingView */ = {
+			isa = PBXGroup;
+			children = (
+				2EB2BE5C1CCA42F900FB1925 /* MessageCell.h */,
+				2EB2BE5D1CCA42F900FB1925 /* MessageCell.m */,
+			);
+			name = ChattingView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,7 +258,6 @@
 			files = (
 				2E7437901CC5EAFD0017D3FF /* LaunchScreen.storyboard in Resources */,
 				2E74378D1CC5EAFD0017D3FF /* Assets.xcassets in Resources */,
-				2E74378B1CC5EAFD0017D3FF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EB2BE5E1CCA42F900FB1925 /* MessageCell.m in Sources */,
 				2E7437881CC5EAFD0017D3FF /* ViewController.m in Sources */,
 				2E7437851CC5EAFD0017D3FF /* AppDelegate.m in Sources */,
 				2E7437821CC5EAFD0017D3FF /* main.m in Sources */,
@@ -311,14 +321,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2E7437891CC5EAFD0017D3FF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2E74378A1CC5EAFD0017D3FF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2E74378E1CC5EAFD0017D3FF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -499,6 +501,7 @@
 				2E7437AC1CC5EAFD0017D3FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2E7437AD1CC5EAFD0017D3FF /* Build configuration list for PBXNativeTarget "ChattingTests" */ = {
 			isa = XCConfigurationList;
@@ -507,6 +510,7 @@
 				2E7437AF1CC5EAFD0017D3FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2E7437B01CC5EAFD0017D3FF /* Build configuration list for PBXNativeTarget "ChattingUITests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +519,7 @@
 				2E7437B21CC5EAFD0017D3FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
