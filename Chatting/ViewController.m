@@ -10,6 +10,10 @@
 #import "MessageCell.h"
 
 
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <AVFoundation/AVFoundation.h>
+
+
 #define  MAIN_WIDTH   (self.view.frame.size.width)
 #define  MAIN_HEIGHT  (self.view.frame.size.height)
 
@@ -20,7 +24,7 @@ static NSString *const cellIdentifierThree = @"MessageCellThree";
 static NSString *const cellIdentifierFour = @"MessageCellFour";
 
 
-@interface ViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface ViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSLayoutConstraint *contentBottomConstraint;
 }
@@ -39,6 +43,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 @property (nonatomic, assign) BOOL menuShow;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapKeyBoardGesture;
+
+@property (nonatomic, strong) UIImagePickerController *pickerController;
 
 @end
 
@@ -77,6 +83,11 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     //[self.view addSubview:[self loadToolBar]];
     [self loadToolBar];
     
+    
+    
+    
+    /*
+    
     [self.messageListArray addObject:@"主要问题在于TabelView第一次进入和每次reloadData时，都会先GetTabelCount，然后对每一项GetCellHeight，然后对显示的的每一项去GetCellData于是，我找到的几乎所有的cell高度自动适应内容的处理办法，其核心思路都是在GetCellHeight时候进行预先计算。这个也能理解。但是大多数是基于"];
     [self.messageListArray addObject:@"[label.text sizeWithFont:label.font]，这要求对cell的style指定要精确，而且重复工作，计算复杂而结果不精确。我想找到一种直接根据cell的子视图，填充上data就能自动生成高度的方法。我看到过这样的代码："];
     [self.messageListArray addObject:@"注意语句1和2，1是不可行的，原因如前所提，会造成getcount和getheight间的递归调用直到栈溢出。但是2可行，我没有想明白是怎么回事，我原以为2和1一样都可能栈溢出？问题：1／语句2为什么不会出错，和语句1有什么区别"];
@@ -87,6 +98,19 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     [self.messageListArray addObject:@"看来这样我就只好用［string SizeWithFont font］来慢慢算"];
     [self.messageListArray addObject:@" 哎 这东西真的是早就该知道的呀。　我发现自己很是喜欢说废话 说问题之前先介绍一下UIView的contente属性我这次用的时候主要是UIImageView用来显示图片的  这个属性的默认是 UIViewContentModeScaleToFill 这个就是常看到的图片会变形填满；主要说一下这两个属性"];
     [self.messageListArray addObject:@" 哎 这东西真的是早就该知道的呀。　我发现自己很是喜欢说废话 说问题之前先介绍一下UIView的contente属性我这次用的时候主要是UIImageView用来显示图片的  这个属性的默认是 UIViewContentModeScaleToFill 这个就是常看到的图片会变形填满；主要说一下这两个属性"];
+     
+     */
+    
+    [self.messageListArray addObject:@{@"message":@"哎 这东西真的是早就该知道的呀。　我发现自己很是喜欢说废话 说问题之前先介绍一下UIView的contente属性我这次用的时候主要是UIImageView用来显示图片的  这个属性的默认是 UIViewContentModeScaleToFill 这个就是常看到的图片会变形填满；主要说一下这两个属性",@"index":@"0"}];
+    
+    [self.messageListArray addObject:@{@"message":@"掐指算下来做iOS开发也是有两年多的时间了，然后今天一个超级常用的控件让我颜面大跌，于是我准备把自己的丢人行径公之于众。如果您看到我这篇文章时和我一样，也是刚刚知道这项功能，那么您就当收获了一个。。。（其实不算什么），如果您早就知道了 ，那您可以无限的嘲笑我了首先交代一下事情的前因 就是 我有个位置要显示图片，但是美工的图片和我的位置无论大小还是比例 都是不对的，但是同事说这样就可以了 自己处理一下就行 这地方要求不高，但是我就不知道怎么处理才行，于是乎还是请教了同事 最后发现 哎 这东西真的是早就该知道的呀。　我发现自己很是喜欢说废话 说问题之前先介绍一下UIView的contente属性我这次用的时候主要是UIImageView用来显示图片的  这个属性的默认是 UIViewContentModeScaleToFill 这个就是常看到的图片会变形填满；主要说一下这两个属性",@"index":@"1"}];
+    [self.messageListArray addObject:@{@"message":@"主要问题在于TabelView第一次进入和每次reloadData时，都会先GetTabelCount，然后对每一项GetCellHeight，然后对显示的的每一项去GetCellData于是，我找到的几乎所有的cell高度自动适应内容的处理办法，其核心思路都是在GetCellHeight时候进行预先计算。这个也能理解。但是大多数是基于",@"index":@"2"}];
+    [self.messageListArray addObject:@{@"message":@"哎 这东西真的是早就该知道的呀。　我发现自己很是喜欢说废话 说问题之前先介绍一下UIView的contente属性我这次用的时候主要是UIImageView用来显示图片的  这个属性的默认是 UIViewContentModeScaleToFill 这个就是常看到的图片会变形填满；主要说一下这两个属性",@"index":@"3"}];
+    [self.messageListArray addObject:@{@"message":@"语句3原先是为了自动取得赋值后的cell高度，但是却失败了。我还尝试过其它方法，比如访问frame／bounds等等，也不行。有没有什么好的预先自动计算高度的方法？不使用语句2也行的。3／如果成功预计算出了不同cell的高度，那么在GetCellData中，对于reuse和createNewCell是否需要不同的IdentifyId，即使style相同。对于不是自己create的而是从nib中读取cell的这种，又是怎么设置高度不同的的IdentifyId呢？IdentifyId到底是根据什么而变化的？",@"index":@"4"}];
+    [self.messageListArray addObject:@{@"image":[UIImage imageNamed:@"yose2"],@"index":@"3"}];
+    [self.messageListArray addObject:@{@"image":[UIImage imageNamed:@"wdc"],@"index":@"4"}];
+    
+    
     self.messageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, MAIN_WIDTH, MAIN_HEIGHT-108) style:UITableViewStylePlain];
     self.messageTableView.delegate = self;
     self.messageTableView.dataSource = self;
@@ -107,7 +131,11 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     [self.messageTableView addGestureRecognizer:self.tapKeyBoardGesture ];
     
     
-
+    self.pickerController = [[UIImagePickerController alloc]init];
+    self.pickerController.delegate = self;
+    self.pickerController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    self.pickerController.allowsEditing = YES;
+    
     
     
     
@@ -150,46 +178,60 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     NSInteger index = [indexPath row];
-    if (index%2 == 0) {
-        MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierTwo];
-        if (cell == nil) {
-            cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierTwo];
+    NSDictionary *dict = [self.messageListArray objectAtIndex:index];
+    //NSInteger indexNum = [(NSString *)[dict valueForKey:@"index"]integerValue];
+    NSString *message = [dict valueForKey:@"message"];
+    if (message) {
+        if (index%2 == 0) {
+            MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierTwo];
+            if (cell == nil) {
+                cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierTwo];
+            }
+            
+            [cell setContent:message withStyle:MessageCellStyleRight userImage:@"cat"];
+            return cell;
+            
         }
-        [cell setContent:[self.messageListArray objectAtIndex:index] withStyle:MessageCellStyleRight userImage:@"cat"];
-        return cell;
-        
+        else if (index%2 == 1) {
+            MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierOne];
+            if (cell == nil) {
+                cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierOne];
+            }
+            [cell setContent:message withStyle:MessageCellStyleLeft userImage:@"dog"];
+            return cell;
+        }
     }
-    else if (index%2 == 1) {
-        MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierOne];
-        if (cell == nil) {
-            cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierOne];
+    if (!message) {
+        UIImage *image = [dict valueForKey:@"image"];
+        if (!image) {
+            return nil;
         }
-        [cell setContent:[self.messageListArray objectAtIndex:index] withStyle:MessageCellStyleLeft userImage:@"dog"];
-        return cell;
+        image = [self scaleImageWithImage:image];
+         if (index%2==1) {
+            MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierThree];
+            if (cell == nil) {
+                cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierThree];
+            }
+             [cell setImageWithImage:image withStyle:MessageCellStyleImageRight userImage:@"cat"];
+            
+            return cell;
+        }
+        else if (index %2 ==0) {
+            MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierFour];
+            if (cell == nil) {
+                cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierFour];
+            }
+            [cell setImageWithImage:image withStyle:MessageCellStyleImageLeft userImage:@"dog"];
+            
+            return cell;
+            
+            
+        }
     }
-    return nil;
-    /*
-    else if (index%4==2) {
-        MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierTwo];
-        if (cell == nil) {
-            cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierThree];
-        }
-        [cell setImageWithImage:[UIImage imageNamed:@"yose2"] withStyle:MessageCellStyleImageRight userImage:@"cat"];
-        
-        return cell;
-    }
-    else {
-        MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifierTwo];
-        if (cell == nil) {
-            cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierFour];
-        }
-        [cell setImageWithImage:[UIImage imageNamed:@"wdc"] withStyle:MessageCellStyleImageLeft userImage:@"dog"];
 
-        return cell;
-        
-        
-    }
-     */
+    
+    return nil;
+    
 
 }
 
@@ -199,19 +241,42 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     MessageCell *cell = (MessageCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *reuseIdentifier = [cell reuseIdentifier];
     NSInteger index = [indexPath row];
+    NSDictionary *dict = [self.messageListArray objectAtIndex:index];
     if ([reuseIdentifier isEqualToString:cellIdentifierOne] || [reuseIdentifier isEqualToString:cellIdentifierTwo]) {
-        NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:18]};
-        CGRect contentRect = [[self.messageListArray objectAtIndex:index] boundingRectWithSize:CGSizeMake(MAIN_WIDTH-140, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attribute context:nil];
-        NSLog(@"wid %f",contentRect.size.width);
-        return contentRect.size.height + 55;
+        NSString *message = [dict valueForKey:@"message"];
+        if (message) {
+            NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:18]};
+            CGRect contentRect = [message boundingRectWithSize:CGSizeMake(MAIN_WIDTH-140, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attribute context:nil];
+            NSLog(@"wid %f",contentRect.size.width);
+            return contentRect.size.height + 55;
+        }
+
     }
     else if ([reuseIdentifier isEqualToString:cellIdentifierFour] || [reuseIdentifier isEqualToString:cellIdentifierThree]) {
-        
+        UIImage *image = [dict valueForKey:@"image"];
+        if (image) {
+            image = [self scaleImageWithImage:image];
+            return image.size.height + 55;
+        }
+
     }
     return 150;
     
 }
 
+
+- (UIImage *)scaleImageWithImage:(UIImage *)image {
+    CGSize size = CGSizeMake(MAIN_WIDTH-140, 0);
+    
+    CGFloat imageHeight = image.size.height;
+    CGFloat imageWidth = image.size.width;
+    size.height = imageHeight * size.width / imageWidth;
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *scaleImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaleImage;
+}
 
 
 - (void)loadToolBar {
@@ -325,7 +390,16 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.messageListArray addObject:textField.text];
+    NSString *text = textField.text;
+    if ([text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    NSInteger index = [self.messageListArray count];
+    NSString *indexString = [NSString stringWithFormat:@"%lu",index];
+    NSDictionary *messageDict = [[NSDictionary alloc]initWithObjects:@[indexString,text] forKeys:@[@"index",@"message"]];
+    [self.messageListArray addObject:messageDict];
+    
     [self.messageTableView reloadData];
     textField.text = @"";
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageListArray count]-1 inSection:0];
@@ -362,11 +436,88 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 
 - (void)openPhotoLibrary:(UIButton *)sender {
     
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"相册不可用" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
+    self.pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    
+    
+    
+    
+    
 }
+
+
+- (void)getImageFromLibraryOrCamamera:(UIImage *)image {
+    NSString *index = [NSString stringWithFormat:@"%lu",[self.messageListArray count]];
+    
+    NSDictionary *dict = [[NSDictionary alloc]initWithObjects:@[index,image] forKeys:@[@"index",@"image"]];
+    [self.messageListArray addObject:dict];
+    [self.messageTableView reloadData];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageListArray count]-1 inSection:0];
+    [self.messageTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    
+}
+
+
 
 
 - (void)takePhoto:(UIButton *)sender {
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"相机不可用" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:action];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }
+    self.pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.pickerController.mediaTypes = @[(NSString *)kUTTypeImage];
+    self.pickerController.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+    [self presentViewController:self.pickerController animated:YES completion:nil];
     
 }
+
+
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [[picker parentViewController]dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    UIImage *originImage,*editImage,*imageSave;
+    if (CFStringCompare((CFStringRef)mediaType, kUTTypeImage, 0)==kCFCompareEqualTo) {
+        editImage = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+        originImage = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
+        if (editImage) {
+            imageSave = editImage;
+        } else {
+            imageSave = originImage;
+        }
+        // delegate
+        
+        UIImageWriteToSavedPhotosAlbum(imageSave, nil, nil, nil);
+    }
+    
+    [[self parentViewController]dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+
+
+
 
 @end

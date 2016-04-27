@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E3DDBCD1CD0BCDA00F6AA98 /* wdc.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E3DDBCC1CD0BCDA00F6AA98 /* wdc.png */; };
 		2E7437821CC5EAFD0017D3FF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437811CC5EAFD0017D3FF /* main.m */; };
 		2E7437851CC5EAFD0017D3FF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437841CC5EAFD0017D3FF /* AppDelegate.m */; };
 		2E7437881CC5EAFD0017D3FF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E7437871CC5EAFD0017D3FF /* ViewController.m */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2E3DDBCC1CD0BCDA00F6AA98 /* wdc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wdc.png; sourceTree = "<group>"; };
 		2E74377D1CC5EAFD0017D3FF /* Chatting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chatting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7437811CC5EAFD0017D3FF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2E7437831CC5EAFD0017D3FF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		2E7437801CC5EAFD0017D3FF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2E3DDBCC1CD0BCDA00F6AA98 /* wdc.png */,
 				2E7437811CC5EAFD0017D3FF /* main.m */,
 			);
 			name = "Supporting Files";
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E3DDBCD1CD0BCDA00F6AA98 /* wdc.png in Resources */,
 				2E7437901CC5EAFD0017D3FF /* LaunchScreen.storyboard in Resources */,
 				2E74378D1CC5EAFD0017D3FF /* Assets.xcassets in Resources */,
 			);
