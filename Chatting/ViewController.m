@@ -27,6 +27,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 @interface ViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSLayoutConstraint *contentBottomConstraint;
+    UIView *backView;  // picture back
 }
 @property (nonatomic, strong) UIToolbar *toolBar;
 
@@ -45,6 +46,9 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 @property (nonatomic, strong) UITapGestureRecognizer *tapKeyBoardGesture;
 
 @property (nonatomic, strong) UIImagePickerController *pickerController;
+
+
+@property (nonatomic, strong) UITapGestureRecognizer *shutImageViewGesture;
 
 @end
 
@@ -100,7 +104,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     self.messageTableView.dataSource = self;
     self.messageTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.messageTableView.estimatedRowHeight = 80;
-    self.messageTableView.allowsSelection = NO;
+    self.messageTableView.allowsSelection = YES;
 
     [self.contentView addSubview:self.messageTableView];
     
@@ -117,8 +121,14 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     
     self.pickerController = [[UIImagePickerController alloc]init];
     self.pickerController.delegate = self;
-    self.pickerController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    self.pickerController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     self.pickerController.allowsEditing = YES;
+    
+    
+    self.shutImageViewGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(shutImageView:)];
+    self.shutImageViewGesture.numberOfTapsRequired = 1;
+    self.shutImageViewGesture.numberOfTouchesRequired = 1;
+    
     
     
     
@@ -171,7 +181,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
             if (cell == nil) {
                 cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierTwo];
             }
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell setContent:message withStyle:MessageCellStyleRight userImage:@"cat"];
             return cell;
             
@@ -181,6 +191,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
             if (cell == nil) {
                 cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierOne];
             }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             [cell setContent:message withStyle:MessageCellStyleLeft userImage:@"dog"];
             return cell;
         }
@@ -196,6 +208,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
             if (cell == nil) {
                 cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierThree];
             }
+             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
              [cell setImageWithImage:image withStyle:MessageCellStyleImageRight userImage:@"cat"];
             
             return cell;
@@ -205,8 +219,10 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
             if (cell == nil) {
                 cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierFour];
             }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             [cell setImageWithImage:image withStyle:MessageCellStyleImageLeft userImage:@"dog"];
-            
+        
             return cell;
             
             
@@ -216,6 +232,20 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     
     return nil;
     
+
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger index = [indexPath row];
+    NSDictionary *dict = [self.messageListArray objectAtIndex:index];
+    UIImage *image = [dict valueForKey:@"image"];
+    if (image) {
+        [self showImage:image];
+    }
+    else {
+        return;
+    }
 
 }
 
@@ -347,9 +377,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
         self.contentView.frame = rect;
         
     } completion:^(BOOL finished) {
-
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageListArray count]-1 inSection:0];
-            [self.messageTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageListArray count]-1 inSection:0];
+        [self.messageTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }];
 
 }
@@ -420,7 +449,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 
 - (void)openPhotoLibrary:(UIButton *)sender {
     
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO) {
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"相册不可用" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [alert dismissViewControllerAnimated:YES completion:nil];
@@ -429,8 +458,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
         [self presentViewController:alert animated:YES completion:nil];
     }
     
-    self.pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    
+    self.pickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    [self presentViewController:self.pickerController animated:YES completion:nil];
     
     
     
@@ -440,6 +469,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 
 
 - (void)getImageFromLibraryOrCamamera:(UIImage *)image {
+    NSLog(@"ADSFGHJK");
     NSString *index = [NSString stringWithFormat:@"%lu",[self.messageListArray count]];
     
     NSDictionary *dict = [[NSDictionary alloc]initWithObjects:@[index,image] forKeys:@[@"index",@"image"]];
@@ -475,7 +505,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [[picker parentViewController]dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -495,11 +525,42 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
         
         UIImageWriteToSavedPhotosAlbum(imageSave, nil, nil, nil);
     }
-    
+    [self getImageFromLibraryOrCamamera:imageSave];
     [[self parentViewController]dismissViewControllerAnimated:YES completion:nil];
 
 }
 
+
+- (void)showImage:(UIImage *)image {
+    
+    backView = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    backView.backgroundColor = [UIColor blackColor];
+    
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:backView.bounds];
+    imageView.image = image;
+    imageView.center = backView.center;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [backView addSubview:imageView];
+    [self.view addSubview:backView];
+    backView.alpha = 0.01;
+    [UIView animateWithDuration:0.5 animations:^{
+        backView.alpha = 1;
+    } completion:^(BOOL finished) {
+        [backView addGestureRecognizer:self.shutImageViewGesture];
+    }];
+    
+}
+
+
+- (void)shutImageView:(UITapGestureRecognizer *)recognizer {
+    [UIView animateWithDuration:0.5 animations:^{
+        backView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [backView removeGestureRecognizer:self.shutImageViewGesture];
+        [backView removeFromSuperview];
+    }];
+    
+}
 
 
 
