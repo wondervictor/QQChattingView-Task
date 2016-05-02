@@ -462,9 +462,6 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     [self presentViewController:self.pickerController animated:YES completion:nil];
     
     
-    
-    
-    
 }
 
 
@@ -511,6 +508,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     UIImage *originImage,*editImage,*imageSave;
     if (CFStringCompare((CFStringRef)mediaType, kUTTypeImage, 0)==kCFCompareEqualTo) {
@@ -522,8 +521,9 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
             imageSave = originImage;
         }
         // delegate
-        
-        UIImageWriteToSavedPhotosAlbum(imageSave, nil, nil, nil);
+        if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+            UIImageWriteToSavedPhotosAlbum(imageSave, nil, nil, nil);
+        }
     }
     [self getImageFromLibraryOrCamamera:imageSave];
     [[self parentViewController]dismissViewControllerAnimated:YES completion:nil];
