@@ -193,16 +193,17 @@
     self.contentLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.contentLabel.numberOfLines = 0;
     
-    
+   CGFloat offset = [self getTextWidthWithText:content];
     // 头像在左边
+    
     if (style == MessageCellStyleLeft) {
         // ImageLabel
-        [self layoutBackImageLeft];
+        [self layoutBackImageLeftWithOffSet:offset];
 
         
     }  // 头像在右边
     else if (style == MessageCellStyleRight) {
-        [self layoutBackImageRight];
+        [self layoutBackImageRightWithOffSet:offset];
         
     }
 
@@ -217,12 +218,12 @@
     
     
     if (style == MessageCellStyleImageLeft) {
-        [self layoutBackImageLeft];
+        [self layoutBackImageLeftWithOffSet:0];
         
         
     }
     else if (style == MessageCellStyleImageRight) {
-        [self layoutBackImageRight];
+        [self layoutBackImageRightWithOffSet:0];
         
     }
     NSLog(@"-%f",self.backgroundImageView.frame.size.height);
@@ -234,7 +235,7 @@
 
 }
 
-- (void)layoutBackImageRight {
+- (void)layoutBackImageRightWithOffSet:(CGFloat)offset {
     self.headImage.frame = CGRectMake(VIEW_WIDTH-50, 10, 40, 40);
     self.backgroundImageView.image = [self resizeImageWithImage:@"sendMessage"];
     
@@ -252,11 +253,11 @@
                                                                        toItem:self.contentView
                                                                     attribute:NSLayoutAttributeLeft
                                                                    multiplier:1.0
-                                                                     constant:50];
+                                                                     constant:50+offset];
     constriaint4.active = YES;
 }
 
-- (void)layoutBackImageLeft {
+- (void)layoutBackImageLeftWithOffSet:(CGFloat)offset {
     self.headImage.frame = CGRectMake(10, 10, 40, 40);
     self.backgroundImageView.image = [self resizeImageWithImage:@"receiveMessage"];
     
@@ -275,10 +276,23 @@
                                                                        toItem:self.contentView
                                                                     attribute:NSLayoutAttributeRight
                                                                    multiplier:1.0
-                                                                     constant:-50];
+                                                                     constant:-50-offset];
     constriaint4.active = YES;
 
 }
+
+
+- (CGFloat)getTextWidthWithText:(NSString *)text {
+    CGFloat width = 0.0;
+    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:18]};
+
+    CGRect contentRect = [text boundingRectWithSize:CGSizeMake(VIEW_WIDTH-140, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attribute context:nil];
+    width = contentRect.size.width;
+    NSLog(@"wid %f",contentRect.size.width);
+    return VIEW_WIDTH-140-width;
+}
+
+
 
 - (UIImage *)scaleImageWithImage:(UIImage *)image {
     CGSize size = CGSizeMake(VIEW_WIDTH-140, 0);
