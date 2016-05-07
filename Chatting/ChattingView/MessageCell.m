@@ -217,9 +217,7 @@
 
 - (void)setImageWithImage:(UIImage *)image withStyle:(MessageCellStyle)style userImage:(NSString *)userImage {
     [self.contentLabel removeFromSuperview];
-    self.headImage.image = [UIImage imageNamed:userImage];
-    //self.contentImage.image = [self resizeImageWithImage:image toSize:self.contentImage.frame.size];
-    
+    self.headImage.image = [UIImage imageNamed:userImage];    
     
     if (style == MessageCellStyleImageLeft) {
         [self layoutBackImageLeftWithOffSet:0];
@@ -230,11 +228,7 @@
         [self layoutBackImageRightWithOffSet:0];
         
     }
-    NSLog(@"-%f",self.backgroundImageView.frame.size.height);
-    NSLog(@"%f",image.size.height);
-    //self.contentImage.contentMode = UIViewContentModeCenter;
-    //self.contentImage.image = image;
-    
+
     self.contentImage.image = [self scaleImageWithImage:image];
 
 }
@@ -262,7 +256,6 @@
                                                                    multiplier:1.0
                                                                      constant:50+offset];
     _constriaint4.active = YES;
-    //[self.contentView layoutIfNeeded];
     [self.backgroundImageView updateConstraints];
     [self.contentView updateConstraints];
     [self.contentView layoutSubviews];
@@ -296,9 +289,7 @@
     _constriaint4.active = YES;
     
     [self.contentView updateConstraints];
-
     [self.backgroundImageView updateConstraints];
-    //[self.contentView layoutIfNeeded];
     [self.contentView layoutSubviews];
 
 

@@ -476,7 +476,9 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     [self.messageListArray addObject:dict];
     [self.messageTableView reloadData];
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.messageListArray count]-1 inSection:0];
-    [self.messageTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+
+
+     [self.messageTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
 }
 
