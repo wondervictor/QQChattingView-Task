@@ -42,4 +42,5 @@ typedef NS_ENUM(NSInteger, MessageCellWidthStyle) {
 
 - (void)setImageWithImage:(UIImage *)image withStyle:(MessageCellStyle)style userImage:(NSString *)userImage;
 
+
 @end

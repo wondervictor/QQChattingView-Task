@@ -99,6 +99,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     [self.messageListArray addObject:@{@"image":[UIImage imageNamed:@"wdc"],@"index":@"4"}];
     
     
+
+     
     self.messageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, MAIN_WIDTH, MAIN_HEIGHT-108) style:UITableViewStylePlain];
     self.messageTableView.delegate = self;
     self.messageTableView.dataSource = self;
@@ -192,7 +194,6 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
                 cell = [[MessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifierOne];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
             [cell setContent:message withStyle:MessageCellStyleLeft userImage:@"dog"];
             return cell;
         }

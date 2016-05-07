@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 
+@property (nonatomic, strong) NSLayoutConstraint *constriaint3;
+@property (nonatomic, strong) NSLayoutConstraint *constriaint4;
 
 @end
 
@@ -199,11 +201,13 @@
     if (style == MessageCellStyleLeft) {
         // ImageLabel
         [self layoutBackImageLeftWithOffSet:offset];
-
+        [self setNeedsUpdateConstraints];
         
     }  // 头像在右边
     else if (style == MessageCellStyleRight) {
         [self layoutBackImageRightWithOffSet:offset];
+        [self setNeedsUpdateConstraints];
+
         
     }
 
@@ -236,50 +240,75 @@
 }
 
 - (void)layoutBackImageRightWithOffSet:(CGFloat)offset {
+    NSLog(@"offset %f",offset);
     self.headImage.frame = CGRectMake(VIEW_WIDTH-50, 10, 40, 40);
     self.backgroundImageView.image = [self resizeImageWithImage:@"sendMessage"];
-    
-    NSLayoutConstraint *constriaint3 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
+    _constriaint3 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
                                                                     attribute:NSLayoutAttributeRight
                                                                     relatedBy:NSLayoutRelationEqual
                                                                        toItem:self.headImage
                                                                     attribute:NSLayoutAttributeLeft
                                                                    multiplier:1.0
                                                                      constant:0];
-    constriaint3.active = YES;
-    NSLayoutConstraint *constriaint4 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
+    _constriaint3.active = YES;
+    
+    [self.contentView removeConstraint:_constriaint4];
+
+    _constriaint4 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
                                                                     attribute:NSLayoutAttributeLeft
                                                                     relatedBy:NSLayoutRelationEqual
                                                                        toItem:self.contentView
                                                                     attribute:NSLayoutAttributeLeft
                                                                    multiplier:1.0
                                                                      constant:50+offset];
-    constriaint4.active = YES;
+    _constriaint4.active = YES;
+    //[self.contentView layoutIfNeeded];
+    [self.backgroundImageView updateConstraints];
+    [self.contentView updateConstraints];
+    [self.contentView layoutSubviews];
+   
+
+    
 }
 
 - (void)layoutBackImageLeftWithOffSet:(CGFloat)offset {
     self.headImage.frame = CGRectMake(10, 10, 40, 40);
     self.backgroundImageView.image = [self resizeImageWithImage:@"receiveMessage"];
     
-    NSLayoutConstraint *constriaint3 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
+    _constriaint3 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
                                                                     attribute:NSLayoutAttributeLeft
                                                                     relatedBy:NSLayoutRelationEqual
                                                                        toItem:self.headImage
                                                                     attribute:NSLayoutAttributeRight
                                                                    multiplier:1.0
                                                                      constant:0];
-    constriaint3.active = YES;
+    _constriaint3.active = YES;
     
-    NSLayoutConstraint *constriaint4 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
+    
+    [self.contentView removeConstraint:_constriaint4];
+    _constriaint4 = [NSLayoutConstraint constraintWithItem:self.backgroundImageView
                                                                     attribute:NSLayoutAttributeRight
                                                                     relatedBy:NSLayoutRelationEqual
                                                                        toItem:self.contentView
                                                                     attribute:NSLayoutAttributeRight
                                                                    multiplier:1.0
                                                                      constant:-50-offset];
-    constriaint4.active = YES;
+    _constriaint4.active = YES;
+    
+    [self.contentView updateConstraints];
+
+    [self.backgroundImageView updateConstraints];
+    //[self.contentView layoutIfNeeded];
+    [self.contentView layoutSubviews];
+
+
 
 }
+
+
+
+
+
 
 
 - (CGFloat)getTextWidthWithText:(NSString *)text {
@@ -287,9 +316,16 @@
     NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:18]};
 
     CGRect contentRect = [text boundingRectWithSize:CGSizeMake(VIEW_WIDTH-140, 1000) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:attribute context:nil];
+    NSLog(@"%@",text);
     width = contentRect.size.width;
     NSLog(@"wid %f",contentRect.size.width);
-    return VIEW_WIDTH-140-width;
+    width = VIEW_WIDTH-140-width;
+    NSLog(@"width %f",width);
+
+    if (width < 5) {
+        return 0;
+    }
+    return width;
 }
 
 
