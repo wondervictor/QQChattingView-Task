@@ -108,6 +108,7 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     self.messageTableView.estimatedRowHeight = 80;
     self.messageTableView.allowsSelection = YES;
 
+
     [self.contentView addSubview:self.messageTableView];
     
     
@@ -358,6 +359,8 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
     
 }
 
+
+
 - (void)keyboardHide:(NSNotification *)notification {
     NSLog(@"hide");
     self.keyboardShow = NO;
@@ -385,7 +388,6 @@ static NSString *const cellIdentifierFour = @"MessageCellFour";
 }
 
 - (void)shutKeyBoard:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"saDFSGDHFJK");
     if (self.keyboardShow == YES) {
         [self.messageText resignFirstResponder];
         [self.messageTableView removeGestureRecognizer:self.tapKeyBoardGesture];
